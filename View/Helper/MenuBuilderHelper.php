@@ -316,6 +316,14 @@ class MenuBuilderHelper extends AppHelper {
 			$children = $ret . $children . $pad;
 		}
 
+        if (isset($item['customHtmlBeforeUrl'])) {
+            $url = $item['customHtmlBeforeUrl'] . $url;
+        }
+
+        if (isset($item['customHtmlAfterUrl'])) {
+            $url = $url . $item['customHtmlAfterUrl'];
+        }
+
 		return sprintf('%s' . $this->settings['itemFormat'] . $ret, $pad, $class, $url, $children);
 	}
 
