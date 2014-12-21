@@ -301,7 +301,14 @@ class MenuBuilderHelper extends AppHelper {
 				$labelTitle = (isset($urlOptions['escape']) && $urlOptions['escape']) ? h($item['title']) : $item['title'];
 				$url = $this->Html->link($this->Html->image($item['image'], array('alt' => $item['title'])) . '<span class="label">' . $labelTitle . '</span>', $item['url'], $urlOptions);
 			} else {
-				$url = $this->Html->link($item['title'], $item['url'], $urlOptions);
+                $innerHtml = $item['title'];
+                if (isset($item['innerLinkHtmlStart'])) {
+                    $innerHtml = $item['innerLinkHtmlStart'] . $innerHtml;
+                }
+                if (isset($item['innerLinkHtmlEnd'])) {
+                    $innerHtml = $innerHtml . $item['innerLinkHtmlEnd'];
+                }
+				$url = $this->Html->link($innerHtml, $item['url'], $urlOptions);
 			}
 		}
 
