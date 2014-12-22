@@ -1,5 +1,5 @@
 <?php
-App::uses('AppHelper', 'View/Helper');
+App::uses('AppHelper', 'View/Helper', 'Session');
 
 /**
  * MenuBuilder Helper
@@ -72,9 +72,9 @@ class MenuBuilderHelper extends AppHelper {
 		'wrapperClass' => null,
 		'noLinkFormat' => '<a href="#">%s</a>',
 		'menuVar' => 'menu',
-		'authVar' => 'user',
+		'authVar' => 'Auth',
 		'authModel' => 'User',
-		'authField' => 'group',
+		'authField' => 'role',
 		'indentHtmlOutput' => true,
 	);
 
@@ -94,14 +94,14 @@ class MenuBuilderHelper extends AppHelper {
 		if (!isset($View->viewVars[$this->settings['menuVar']])) {
 			return;
 		}
-
+        App::uses('CakeSession', 'Model/Datasource');
 		$this->_menu = $View->viewVars[$this->settings['menuVar']];
-
-		if (isset($View->viewVars[$this->settings['authVar']]) &&
-				isset($View->viewVars[$this->settings['authVar']][$this->settings['authModel']]) &&
-				isset($View->viewVars[$this->settings['authVar']][$this->settings['authModel']][$this->settings['authField']])) {
-			$this->_group = $View->viewVars[$this->settings['authVar']][$this->settings['authModel']][$this->settings['authField']];
-		}
+        $role = CakeSession::read('Auth.User.role');
+		if (isset($role)) {
+            $this->_group = CakeSession::read('Auth.User.role');//$View->viewVars[$this->settings['authVar']][$this->settings['authModel']][$this->settings['authField']];
+		} else {
+            $this->_group = 'guest';
+        }
 
 		parent::__construct($View, (array)$settings);
 	}
